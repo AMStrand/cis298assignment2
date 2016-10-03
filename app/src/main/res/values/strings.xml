@@ -10,4 +10,6 @@
     <string name="convert_button">Convert</string>
     <string name="answer_text">Answer</string>
     <string name="calculation_text">Calculation Used</string>
+
+    <string name="input_error_message">You entered an invalid temperature.</string>
 </resources>
