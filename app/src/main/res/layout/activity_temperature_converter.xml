@@ -47,6 +47,7 @@
             </TextView>
 
             <RadioGroup
+                android:id="@+id/from_temp_type_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -95,6 +96,7 @@
             </TextView>
 
             <RadioGroup
+                android:id="@+id/to_temp_type_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 

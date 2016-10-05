@@ -1,5 +1,6 @@
 package edu.kvcc.cis298.cis298assignment2;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,16 +14,22 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 
 public class TemperatureConverter extends AppCompatActivity {
 
     // Variable declarations for widget controls:
 
+    private RadioGroup mFromGroup;
     private RadioButton mFromCelsius;
     private RadioButton mFromFahrenheit;
     private RadioButton mFromKelvin;
     private RadioButton mFromRankine;
 
+    private RadioGroup mToGroup;
     private RadioButton mToCelsius;
     private RadioButton mToFahrenheit;
     private RadioButton mToKelvin;
@@ -35,17 +42,26 @@ public class TemperatureConverter extends AppCompatActivity {
     // Variable declarations:
     private double mTemperature;
 
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient mClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temperature_converter);
 
         // Attach the widgets to their variables:
+        mFromGroup = (RadioGroup) findViewById(R.id.from_temp_type_group);
         mFromCelsius = (RadioButton) findViewById(R.id.from_celsius);
         mFromFahrenheit = (RadioButton) findViewById(R.id.from_fahrenheit);
         mFromKelvin = (RadioButton) findViewById(R.id.from_kelvin);
         mFromRankine = (RadioButton) findViewById(R.id.from_rankine);
 
+        mToGroup = (RadioGroup) findViewById(R.id.to_temp_type_group);
         mToCelsius = (RadioButton) findViewById(R.id.to_celsius);
         mToFahrenheit = (RadioButton) findViewById(R.id.to_fahrenheit);
         mToKelvin = (RadioButton) findViewById(R.id.to_kelvin);
@@ -60,6 +76,14 @@ public class TemperatureConverter extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     mTemperature = (double) R.id.temperature_input;
+                    int mFromTempType = mFromGroup.getCheckedRadioButtonId();
+                    int mToTempType = mToGroup.getCheckedRadioButtonId();
+
+                    CalculateTemperature calculateTemperature = new CalculateTemperature(mTemperature, mFromTempType, mToTempType);
+
+                    mAnswerTextView.setText(Double.toString(calculateTemperature.getFinalTemperature()));
+
+                    mCalculationTextView.setText(calculateTemperature.getCalculationUsed());
                 }
                 catch (Exception ex) {
 
@@ -68,6 +92,9 @@ public class TemperatureConverter extends AppCompatActivity {
         });
 
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -90,5 +117,45 @@ public class TemperatureConverter extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        mClient.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "TemperatureConverter Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://edu.kvcc.cis298.cis298assignment2/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(mClient, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "TemperatureConverter Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://edu.kvcc.cis298.cis298assignment2/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(mClient, viewAction);
+        mClient.disconnect();
     }
 }
