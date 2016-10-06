@@ -2,6 +2,8 @@
 ## Due 10-10-2016
 ## Author
 
+Alyssa Strand
+
 ## Description
 
 Create a temperature converter application.
@@ -44,4 +46,8 @@ The book does not cover how to do work with Radio Buttons. I will talk about it 
 
 ## Outside Resources Used
 
+cis298inclass2 project
+
 ## Known Problems, Issues, And/Or Errors in the Program
+
+None.

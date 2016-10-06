@@ -1,3 +1,7 @@
+// Alyssa Mahler
+// This class receives a temperature and the types to convert from and to, and
+// it does the work of deciding which calculation to use and saving that and the answer.
+
 package edu.kvcc.cis298.cis298assignment2;
 
 import android.widget.RadioButton;
@@ -7,12 +11,14 @@ import android.widget.RadioButton;
  */
 public class CalculateTemperature {
 
+        // Declare private variables:
     private double mTemperature;
-    private int mFromTempType;
-    private int mToTempType;
+    private String mFromTempType;
+    private String mToTempType;
     private double mFinalTemperature;
     private String mCalculationUsed;
 
+        // Properties:
     public double getFinalTemperature() {
         return mFinalTemperature;
     }
@@ -29,108 +35,120 @@ public class CalculateTemperature {
         mCalculationUsed = calculationUsed;
     }
 
-    public int getFromTempType() {
+    public String getFromTempType() {
         return mFromTempType;
     }
 
-    public void setFromTempType(int fromTempType) {
+    public void setFromTempType(String fromTempType) {
         mFromTempType = fromTempType;
     }
 
-    public int getToTempType() {
+    public String getToTempType() {
         return mToTempType;
     }
 
-    public void setToTempType(int toTempType) {
+    public void setToTempType(String toTempType) {
         mToTempType = toTempType;
     }
 
-    public CalculateTemperature(double temperature, int fromTempType, int toTempType)
+        // Constructor:
+    public CalculateTemperature(double temperature, String fromTempType, String toTempType)
     {
+            // Assign the passed parameters to the private variables:
         mTemperature = temperature;
         mFromTempType = fromTempType;
         mToTempType = toTempType;
 
-        if (fromTempType == 1 && toTempType == 2)
-        {
-            mFinalTemperature = mTemperature * 1.8 + 32;
-            mCalculationUsed = "[F] = [C] * 9/5 + 32";
+            // Call the private Calculation method:
+        Calculate();
+    }
+
+        // Private method to determine which calculation to use and save the results:
+    private void Calculate()
+    {
+            // First test which temperature type they are converting from,
+            // then within that, test which type they want to convert to.
+            // Follow the assigned calculation and set the answer and calculation used:
+        if (mFromTempType.equals("Celsius")) {
+
+            if (mToTempType.equals("Fahrenheit")) {
+                mFinalTemperature = mTemperature * 1.8 + 32;
+                mCalculationUsed = "[F]=[C]*9/5+32";
+            } else {
+                if (mToTempType.equals("Kelvin")) {
+                    mFinalTemperature = mTemperature + 273.15;
+                    mCalculationUsed = "[K]=[C]+273.15";
+                } else {
+                    if (mToTempType.equals("Rankine")) {
+                        mFinalTemperature = mTemperature * 1.8 + 32 + 459.67;
+                        mCalculationUsed = "[R]=[C]*1.8+32+459.67";
+                    }
+                }
+            }
         }
 
-        if (fromTempType == 1 && toTempType == 3)
-        {
-            mFinalTemperature = mTemperature + 273.15;
-            mCalculationUsed = "[K] = [C] + 273.15";
+        if (mFromTempType.equals("Fahrenheit")) {
+            if (mToTempType.equals("Celsius")) {
+                mFinalTemperature = (mTemperature - 32) / 1.8;
+                mCalculationUsed = "[C]=([F]-32)*5/9";
+            } else {
+                if (mToTempType.equals("Kelvin")) {
+                    mFinalTemperature = ((mTemperature - 32) / 1.8) + 273.15;
+                    mCalculationUsed = "[K]=([F]-32)/1.8+273.15";
+                } else {
+                    if (mToTempType.equals("Rankine")) {
+                        mFinalTemperature = mTemperature + 459.67;
+                        mCalculationUsed = "[R]=[F]+459.67";
+                    }
+                }
+            }
         }
 
-        if (fromTempType == 1 && toTempType == 4)
-        {
-            mFinalTemperature = mTemperature * 1.8 + 32 + 459.67;
-            mCalculationUsed = "[R] = [C] * 1.8 + 32 + 459.67";
+        if (mFromTempType.equals("Kelvin")) {
+            if (mToTempType.equals("Celsius")) {
+                mFinalTemperature = mTemperature - 273.15;
+                mCalculationUsed = "[C]=[K]-273.15";
+            } else {
+                if (mToTempType.equals("Fahrenheit")) {
+                    mFinalTemperature = (mTemperature - 273.15) * 1.8 + 32;
+                    mCalculationUsed = "[F]=([K]-273.15)*1.8+32";
+                } else {
+                    if (mToTempType.equals("Rankine")) {
+                        mFinalTemperature = mTemperature * 1.8;
+                        mCalculationUsed = "[R]=[K]*1.8";
+                    }
+                }
+            }
         }
 
-        if (fromTempType == 2 && toTempType == 1)
+        if (mFromTempType.equals("Rankine"))
         {
-            mFinalTemperature = (mTemperature - 32) / 1.8;
-            mCalculationUsed = "[C] = ([F] - 32) * 5/9";
+            if (mToTempType.equals("Celsius")) {
+                mFinalTemperature = (mTemperature - 32 - 459.67) / 1.8;
+                mCalculationUsed = "[C]=([R]-32-459.67)/1.8";
+            }
+            else {
+                if (mToTempType.equals("Fahrenheit")) {
+                    mFinalTemperature = mTemperature - 459.67;
+                    mCalculationUsed = "[F]=[R]-459.67";
+                }
+                else {
+                    if (mToTempType.equals("Kelvin")) {
+                        mFinalTemperature = mTemperature / 1.8;
+                        mCalculationUsed = "[K]=[R]/1.8";
+                    }
+                }
+            }
         }
 
-        if (fromTempType == 2 && toTempType == 3)
-        {
-            mFinalTemperature = ((mTemperature - 32) / 1.8) + 273.15;
-            mCalculationUsed = "[K] = ([F] - 32) / 1.8 + 273.15";
-        }
-
-        if (fromTempType == 2 && toTempType == 4)
-        {
-            mFinalTemperature = mTemperature + 459.67;
-            mCalculationUsed = "[R] = [F] + 459.67";
-        }
-
-        if (fromTempType == 3 && toTempType == 1)
-        {
-            mFinalTemperature = mTemperature - 273.15;
-            mCalculationUsed = "[C] = [K] - 273.15";
-        }
-
-        if (fromTempType == 3 && toTempType == 2)
-        {
-            mFinalTemperature = (mTemperature - 273.15) * 1.8 + 32;
-            mCalculationUsed = "[F] = ([K] - 273.15) * 1.8 + 32";
-        }
-
-        if (fromTempType == 3 && toTempType == 4)
-        {
-            mFinalTemperature = mTemperature * 1.8;
-            mCalculationUsed = "[R] = [K] * 1.8";
-        }
-
-        if (fromTempType == 4 && toTempType == 1)
-        {
-            mFinalTemperature = (mTemperature - 32 - 459.67) / 1.8;
-            mCalculationUsed = "[C] = ([R] - 32 - 459.67) / 1.8";
-        }
-
-        if (fromTempType == 4 && toTempType == 2)
-        {
-            mFinalTemperature = mTemperature - 459.67;
-            mCalculationUsed = "[F] = [R] - 459.67";
-        }
-
-        if (fromTempType == 4 && toTempType == 3)
-        {
-            mFinalTemperature = mTemperature / 1.8;
-            mCalculationUsed = "[K] = [R] / 1.8";
-        }
-
-        if (fromTempType == toTempType)
+            // If they selected the same temperature type, output that no conversion was made:
+        if (mFromTempType == mToTempType)
         {
             mFinalTemperature = mTemperature;
             mCalculationUsed = "No conversion used.";
         }
 
     }
-
 }
 
 

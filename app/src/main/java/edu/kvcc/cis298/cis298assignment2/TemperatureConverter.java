@@ -1,3 +1,8 @@
+// Alyssa Mahler
+// CIS 298 Assignment 2
+// This application allows a user to input a temperature and convert that temperature
+// from a choice of four temperature types to another.
+
 package edu.kvcc.cis298.cis298assignment2;
 
 import android.net.Uri;
@@ -9,6 +14,7 @@ import android.view.MenuItem;
 // Import widget control groups:
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -20,6 +26,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 
 public class TemperatureConverter extends AppCompatActivity {
+
+    private String savedBundle;
 
     // Variable declarations for widget controls:
 
@@ -41,7 +49,6 @@ public class TemperatureConverter extends AppCompatActivity {
 
     // Variable declarations:
     private double mTemperature;
-
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -71,22 +78,30 @@ public class TemperatureConverter extends AppCompatActivity {
         mAnswerTextView = (TextView) findViewById(R.id.answer_text);
         mCalculationTextView = (TextView) findViewById(R.id.calculation_text);
 
+            // When the convert button is clicked:
         mConvertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    mTemperature = (double) R.id.temperature_input;
-                    int mFromTempType = mFromGroup.getCheckedRadioButtonId();
-                    int mToTempType = mToGroup.getCheckedRadioButtonId();
+                        // Pull the text from the user input and attempt to convert to double:
+                    mTemperature = Double.parseDouble(((EditText)(findViewById(R.id.temperature_input))).getText().toString());
 
+                        // Set the temperature types to the string used:
+                    String mFromTempType = (((RadioButton)findViewById(mFromGroup.getCheckedRadioButtonId())).getText().toString());
+                    String mToTempType = (((RadioButton)findViewById(mToGroup.getCheckedRadioButtonId())).getText().toString());
+
+                        // Instantiate a CalculateTemperature object and pass in the temperature information:
                     CalculateTemperature calculateTemperature = new CalculateTemperature(mTemperature, mFromTempType, mToTempType);
 
+                        // Set the answer output:
                     mAnswerTextView.setText(Double.toString(calculateTemperature.getFinalTemperature()));
 
+                        // Set the calculation output:
                     mCalculationTextView.setText(calculateTemperature.getCalculationUsed());
                 }
                 catch (Exception ex) {
-
+                        // If any of the above fails, output an error message:
+                    Toast.makeText(getApplicationContext(), getText(R.string.input_error_message), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -95,6 +110,13 @@ public class TemperatureConverter extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         mClient = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    // Save the input temperature and selected radio buttons on screen rotation:
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putAll(savedInstanceState);
     }
 
     @Override
